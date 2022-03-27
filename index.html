@@ -104,14 +104,20 @@
           /*for each item in the array...*/
           for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            // if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            if (arr[i].toUpperCase().includes(val.toUpperCase())) {
               /*create a DIV element for each matching element:*/
               b = document.createElement("DIV");
               //   adding id to each div
               b.id = "option";
               /*make the matching letters bold:*/
-              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-              b.innerHTML += arr[i].substr(val.length);
+              reg = new RegExp("(" + val + ")", "gi");
+
+              // b.innerHTML = arr[i].substr(0, match["index"]);
+              // b.innerHTML += "<strong>" + arr[i].substr(match["index"], match[0].length) + "</strong>";
+              // b.innerHTML += arr[i].substr(match["index"] + match[0].length);
+              b.innerHTML = arr[i].replace(reg, "<strong>$1</strong>");
+
               /*insert a input field that will hold the current array item's value:*/
               b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
               /*execute a function when someone clicks on the item value (DIV element):*/
@@ -122,9 +128,20 @@
                 // document.getElementById("choices").innerHTML = inp.value;
                 selected = document.createElement("div");
                 selected.innerHTML = inp.value;
+                selected.style = "margin-bottom: 10px;";
+
+                quantity = document.createElement("input");
+                quantity.placeholder = "how much.. ?";
+                quantity.style = "margin-left : 10px";
+
+                selected.appendChild(quantity);
 
                 document.getElementById("choices").appendChild(selected);
+
                 console.log(data[inp.value].calories);
+                // delete what is in the input field
+                inp.value = "";
+
                 /*close the list of autocompleted values,
               (or any other open lists of autocompleted values:*/
                 closeAllLists();
